@@ -1,43 +1,36 @@
-import {
-  SIGN_IN_SUCCESS,
-  SIGN_IN_REQUEST,
-  SIGN_FAIL,
-  SIGN_OUT,
-} from './actionTypes';
+import { SIGN_IN_SUCCESS, SIGN_OUT } from '../auth/actionTypes';
+import { UPDATE_PROFILE_REQUEST, UPDATE_PROFILE_SUCCESS } from './actionTypes';
 
 const INITIAL_STATE = {
-  token: null,
-  signed: false,
+  profile: null,
   loading: false,
 };
 
 export default function authReducer(state = INITIAL_STATE, { type, payload }) {
   switch (type) {
-    case SIGN_IN_REQUEST:
+    case SIGN_IN_SUCCESS:
+      return {
+        ...state,
+        profile: payload.user,
+      };
+
+    case UPDATE_PROFILE_REQUEST:
       return {
         ...state,
         loading: true,
       };
 
-    case SIGN_IN_SUCCESS:
-      return {
-        ...state,
-        token: payload.token,
-        signed: true,
-        loading: false,
-      };
-
-    case SIGN_FAIL:
+    case UPDATE_PROFILE_SUCCESS:
       return {
         ...state,
         loading: false,
+        profile: payload.data,
       };
 
     case SIGN_OUT:
       return {
         ...state,
-        token: null,
-        signed: false,
+        profile: null,
       };
 
     default:

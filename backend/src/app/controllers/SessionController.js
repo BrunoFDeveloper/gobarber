@@ -6,6 +6,7 @@ import File from '../models/File';
 
 class SessionController {
   async store(req, res) {
+    console.log(req.body);
     const schema = Yup.object().shape({
       email: Yup.string()
         .email()
@@ -23,7 +24,7 @@ class SessionController {
       where: { email },
       include: [
         {
-          mode: File,
+          model: File,
           as: 'avatar',
           attributes: ['id', 'path', 'url'],
         },

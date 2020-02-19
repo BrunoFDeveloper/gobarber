@@ -1,8 +1,11 @@
 import React from 'react';
 import * as Yup from 'yup';
+import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+
 import logo from '~/assets/logo.svg';
+import { signUpRequest } from '~/store/modules/auth/actions';
 
 const signUpSchema = Yup.object().shape({
   name: Yup.string().required('O nome é obrigatório!'),
@@ -19,8 +22,10 @@ export default function SignUp() {
     validationSchema: signUpSchema,
   });
 
-  function onSubmit(data) {
-    console.log(data);
+  const dispatch = useDispatch();
+
+  function onSubmit({ name, email, password }) {
+    dispatch(signUpRequest(name, email, password));
   }
 
   return (

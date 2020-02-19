@@ -1,7 +1,10 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+
+import { signInRequest } from '~/store/modules/auth/actions';
 import logo from '~/assets/logo.svg';
 
 const signInSchema = Yup.object().shape({
@@ -16,8 +19,12 @@ export default function SignIn() {
     validationSchema: signInSchema,
   });
 
-  function onSubmit(data) {
-    console.log(data);
+  const loading = useSelector(state => state.auth.loading);
+
+  const dispatch = useDispatch();
+
+  function onSubmit({ email, password }) {
+    dispatch(signInRequest(email, password));
   }
 
   return (
@@ -38,7 +45,7 @@ export default function SignIn() {
           ref={register}
         />
         {errors.password && <span>{errors.password.message}</span>}
-        <button type="submit">Acessar</button>
+        <button type="submit">{loading ? 'Carregando...' : 'Acessar'}</button>
         <Link to="/register">Criar conta gratuita</Link>
       </form>
     </>
