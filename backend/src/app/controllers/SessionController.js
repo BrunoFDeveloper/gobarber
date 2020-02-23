@@ -6,7 +6,6 @@ import File from '../models/File';
 
 class SessionController {
   async store(req, res) {
-    console.log(req.body);
     const schema = Yup.object().shape({
       email: Yup.string()
         .email()
