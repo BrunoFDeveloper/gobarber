@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { parseISO, formatRelative } from 'date-fns';
 import pt from 'date-fns/locale/pt';
+import { StackActions } from '@react-navigation/native';
 import BgGradient from '~/components/BackgroundGradient/BackgroundGradient';
 import { Container, Avatar, Name, Time, SubmitButton } from './styles';
 
@@ -10,6 +11,11 @@ export default function Confirm({ route, navigation }) {
     () => formatRelative(parseISO(hour), new Date(), { locale: pt }),
     [hour]
   );
+
+  function confirmSchedule() {
+    navigation.dispatch(StackActions.popToTop());
+    navigation.navigate('Dashboard');
+  }
   return (
     <BgGradient colors={['#7159c1', '#ab59c1']}>
       <Container>
@@ -22,7 +28,9 @@ export default function Confirm({ route, navigation }) {
         />
         <Name>{provider.name}</Name>
         <Time>{timeFormatted}</Time>
-        <SubmitButton onPress={() => {}}>Confirmar agendamento</SubmitButton>
+        <SubmitButton onPress={confirmSchedule}>
+          Confirmar agendamento
+        </SubmitButton>
       </Container>
     </BgGradient>
   );
