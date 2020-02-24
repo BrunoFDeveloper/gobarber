@@ -11,7 +11,7 @@ export function* signIn({ payload: { email, password } }) {
       email,
       password,
     });
-    console.log(response);
+
     const { token, user } = response.data;
 
     if (user.provider) {
@@ -55,13 +55,8 @@ export function setToken({ payload }) {
   if (token) api.defaults.headers.Authorization = `Bearer ${token}`;
 }
 
-export function signOut() {
-  // history.push('/');
-}
-
 export default all([
   takeLatest('persist/REHYDRATE', setToken),
   takeLatest(SIGN_IN_REQUEST, signIn),
   takeLatest(SIGN_UP_REQUEST, signUp),
-  takeLatest(SIGN_OUT, signOut),
 ]);

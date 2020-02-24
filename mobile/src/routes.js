@@ -1,19 +1,70 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useSelector } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { TouchableOpacity } from 'react-native';
 
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import SignIn from './pages/SignIn/SignIn';
 import SignUp from './pages/SignUp/SignUp';
 
 import Dashboard from './pages/Dashboard/Dashboard';
 import Profile from './pages/Profile/Profile';
 
+import SelectProvider from './pages/New/SelectProvider/SelectProvider';
+import SelectDateTime from './pages/New/SelectDateTime/SelectDateTime';
+import Confirm from './pages/New/Confirm/Confirm';
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
+const NewStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerTransparent: true,
+        headerTintColor: '#FFF',
+        headerLeftContainerStyle: {
+          marginLeft: 20,
+        },
+      }}
+    >
+      <Stack.Screen
+        name="Provider"
+        options={({ navigation }) => ({
+          title: 'Selecione o prestador',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.navigate('Dashboard')}>
+              <Icon name="chevron-left" size={20} color="#FFF" />
+            </TouchableOpacity>
+          ),
+        })}
+        component={SelectProvider}
+      />
+      <Stack.Screen
+        name="Date"
+        options={({ navigation: { goBack } }) => ({
+          title: 'Selecione um horário',
+          headerLeft: () => (
+            <TouchableOpacity onPress={goBack}>
+              <Icon name="chevron-left" size={20} color="#FFF" />
+            </TouchableOpacity>
+          ),
+        })}
+        component={SelectDateTime}
+      />
+      <Stack.Screen name="Confirm" component={Confirm} />
+    </Stack.Navigator>
+  );
+};
+
+const iconNames = {
+  Dashboard: 'event',
+  Profile: 'person',
+  New: 'add-circle-outline',
+};
 
 export default function Routes() {
   const signed = useSelector(state => state.auth.signed);
@@ -31,6 +82,13 @@ export default function Routes() {
         </Stack.Navigator>
       ) : (
         <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ color, size }) => {
+              return (
+                <Icon name={iconNames[route.name]} size={size} color={color} />
+              );
+            },
+          })}
           tabBarOptions={{
             keyboardHidesTabBar: true,
             activeTintColor: '#FFF',
@@ -43,22 +101,17 @@ export default function Routes() {
           <Tab.Screen
             name="Dashboard"
             component={Dashboard}
-            options={{
-              tabBarLabel: 'Agendamentos',
-              tabBarIcon: ({ color, size }) => (
-                <Icon name="event" color={color} size={size} />
-              ),
-            }}
+            options={{ tabBarLabel: 'Agendamentos' }}
+          />
+          <Tab.Screen
+            name="New"
+            component={NewStack}
+            options={{ tabBarLabel: 'Agendar', tabBarVisible: false }}
           />
           <Tab.Screen
             name="Profile"
             component={Profile}
-            options={{
-              tabBarLabel: 'Meu perfil',
-              tabBarIcon: ({ color, size }) => (
-                <Icon name="person" color={color} size={size} />
-              ),
-            }}
+            options={{ tabBarLabel: 'Meu perfil' }}
           />
         </Tab.Navigator>
       )}
@@ -67,6 +120,6 @@ export default function Routes() {
 }
 
 Routes.propTypes = {
-  color: PropTypes.string.isRequired,
-  size: PropTypes.number.isRequired,
+  color: PropTypes.string,
+  size: PropTypes.number,
 };
