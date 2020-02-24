@@ -55,7 +55,18 @@ const NewStack = () => {
         })}
         component={SelectDateTime}
       />
-      <Stack.Screen name="Confirm" component={Confirm} />
+      <Stack.Screen
+        name="Confirm"
+        options={({ navigation: { goBack } }) => ({
+          title: 'Confirmar agendamento',
+          headerLeft: () => (
+            <TouchableOpacity onPress={goBack}>
+              <Icon name="chevron-left" size={20} color="#FFF" />
+            </TouchableOpacity>
+          ),
+        })}
+        component={Confirm}
+      />
     </Stack.Navigator>
   );
 };
