@@ -15,7 +15,7 @@
     "@react-navigation/bottom-tabs": "^5.0.6",
     "@react-navigation/native": "^5.0.6",
     "@react-navigation/stack": "^5.0.6",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "date-fns": "^2.9.0",
     "polished": "^3.4.4",
     "prop-types": "^15.7.2",
